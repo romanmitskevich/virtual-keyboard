@@ -1,0 +1,218 @@
+* {
+   padding: 0;
+   margin: 0;
+   border: 0;
+}
+
+*,
+*:before,
+:after {
+   box-sizing: border-box;
+}
+
+:focus,
+:active {
+   outline: none;
+}
+
+a:focus,
+a:active {
+   outline: none;
+}
+
+html,
+body {
+   height: 100%;
+   background-color: black;
+}
+
+body {
+   line-height: 1;
+   -ms-text-size-adjust: 100%;
+   -moz-text-size-adjust: 100%;
+   -webkit-text-size-adjust: 100%;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+body._lock {
+   overflow: hidden;
+}
+
+input,
+button,
+textarea {
+   font-size: inherit;
+}
+
+button {
+   cursor: pointer;
+   color: inherit;
+   background-color: inherit;
+}
+
+a {
+   color: inherit;
+}
+
+a:link,
+a:visited {
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: none;
+}
+
+ul li {
+   list-style: none;
+}
+
+img {
+   vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-weight: inherit;
+   font-size: inherit;
+}
+
+.wrapper{
+   position: relative;
+   top: 0;
+
+   display: flex;
+   flex-flow: column nowrap;
+   align-items: center;
+   justify-content: space-between;
+
+   max-width: 1280px;
+   min-height: 90%;
+   width: 100%;
+
+   margin: 0 auto;
+}
+
+.wrapper h1{
+   margin: 30px 0 10px;
+
+   color: rgb(255, 10, 10);
+   line-height: 45px;
+   letter-spacing: 0.07em;
+   font-size: 42px;
+   font-weight: 800;
+   text-align: center;
+}
+
+.wrapper textarea{
+   display: block;
+   width: 70%;
+   height: 200px;
+
+   padding: 2px 10px;
+
+   line-height: 28px;
+   letter-spacing: 0.06em;
+   font-size: 14px;
+
+   color: white;
+   background-color: transparent;
+   border: 3px solid rgb(255, 215, 160);
+   border-radius: 10px;
+}
+
+.buttons-container{
+   display: flex;
+   flex-wrap: wrap;
+   padding: 10px;
+   margin: 15px 0;
+   gap: 8px;
+
+   text-align: center;
+
+   max-width: 976px;
+   max-height: 336px;
+
+   background: linear-gradient(45deg, rgba(238, 207, 186, 0.4), rgba(197, 221, 232, 0.4));
+   border: 3px solid rgb(255, 160, 160);
+   border-radius: 15px;
+   box-shadow: 2px 2px 20px 2px rgba(255, 255, 255, 0.8);
+}
+
+.keyboard-button{
+   min-width: 55px;
+   width: auto;
+   height: 55px;
+
+   color: red;
+   line-height: 32px;
+   letter-spacing: 0.06em;
+   font-size: 16px;
+   font-weight: 600;
+
+   background-color: #000000;
+   border: 3px solid red;
+   border-radius: 10px;
+
+   transition: all 0.6s ease 0s;
+}
+
+.active-button{
+   background-color: #000000;
+   border: 3px solid yellow;
+   border-radius: 10px;
+}
+
+.wrapper p{
+   margin: 10px 0;
+
+   color: rgb(255, 50, 50);
+   line-height: 19px;
+   letter-spacing: 0.06em;
+   font-size: 16px;
+   text-align: center;
+}
+
+.backspace-button{
+   width: 131px;
+   padding-top: 10px;
+}
+
+.tab-button{
+   width: 68px;
+}
+
+.caps-button{
+   width: 118px;
+}
+
+.enter-button{
+   width: 131px;
+   padding-top: 7px;
+   line-height: 16px;
+}
+
+.shift-left-button{
+   width: 131px;
+}
+
+.shift-right-button{
+   width: 118px;
+}
+
+.space-button{
+   width: 446px;
+   padding-top: 10px;
+}
+
+.arrow-up, 
+.arrow-left,
+.arrow-down,
+.arrow-right{
+   padding-top: 10px;
+}
