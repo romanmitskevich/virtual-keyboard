@@ -23,7 +23,7 @@ divWrapper.append(buttonsContainer);
 const helpText = `<p>Клавиатура создана в операционной системе Windows</p>`;
 divWrapper.insertAdjacentHTML('beforeend', helpText);
 
-const changeLangText = `<p>Для переключения языка комбинация: левыe ctrl + shift</p>`;
+const changeLangText = `<p>Для переключения языка комбинация: ctrl + shift</p>`;
 divWrapper.insertAdjacentHTML('beforeend', changeLangText);
 
 const russianButtons = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
@@ -111,7 +111,15 @@ function createButtons(array) {
    });
 }
 
-createButtons(englishButtons);
+if (localStorage.getItem('currentLanguage')) {
+   currentLanguage = localStorage.getItem('currentLanguage');
+}
+
+if (currentLanguage === 'ru') {
+   createButtons(russianButtons);
+} else {
+   createButtons(englishButtons);
+}
 
 function deleteAllButtons() {
    let buttons = document.querySelectorAll('.keyboard-button');
@@ -139,17 +147,19 @@ document.addEventListener('keydown', (event) => {
       if (currentLanguage === 'en') {
          deleteAllButtons();
          currentLanguage = 'ru';
+         localStorage.setItem('currentLanguage', currentLanguage);
          createButtons(russianButtons);
       } else if (currentLanguage === 'ru') {
          deleteAllButtons();
          currentLanguage = 'en';
+         localStorage.setItem('currentLanguage', currentLanguage);
          createButtons(englishButtons);
       }
    };
 
    let buttons = document.querySelectorAll('.keyboard-button');
    buttons.forEach(element => {
-      if (event.key === element.textContent && event.key.length <= 1) {
+      if (event.key.toLowerCase() === element.textContent.toLowerCase() && event.key.length <= 1) {
          element.classList.add('active-button');
          wrapperTextArea.textContent += element.textContent;
       }
@@ -159,6 +169,20 @@ document.addEventListener('keydown', (event) => {
       getButtonFromDocument('.space-button').classList.add('active-button');
       wrapperTextArea.textContent += ' ';
    }
+});
+
+document.addEventListener('keyup', (event) => {
+   let buttons = document.querySelectorAll('.keyboard-button');
+   buttons.forEach(element => {
+      if (event.key.toLowerCase() === element.textContent.toLowerCase()) {
+         if (event.key !== 'CapsLock') {
+            element.classList.remove('active-button');
+         }
+      }
+      if (event.code === 'Space') {
+         getButtonFromDocument('.space-button').classList.remove('active-button');
+      }
+   });
 });
 
 document.addEventListener('keydown', (event) => {
@@ -294,7 +318,7 @@ document.addEventListener('keydown', (event) => {
       event.preventDefault();
       getButtonFromDocument('.alt-button-left').classList.add('active-button');
    }
-   if (event.key === 'AltGraph' && event.code === 'AltRight') {
+   if (event.key === 'AltGraph' || event.code === 'AltRight') {
       event.preventDefault();
       getButtonFromDocument('.alt-button-right').classList.add('active-button');
    }
@@ -305,7 +329,7 @@ document.addEventListener('keyup', (event) => {
       event.preventDefault();
       getButtonFromDocument('.alt-button-left').classList.remove('active-button');
    }
-   if (event.key === 'AltGraph' && event.code === 'AltRight') {
+   if (event.key === 'AltGraph' || event.code === 'AltRight') {
       event.preventDefault();
       getButtonFromDocument('.alt-button-right').classList.remove('active-button');
    }
@@ -384,21 +408,6 @@ document.addEventListener('keyup', (event) => {
    };
 });
 
-document.addEventListener('keyup', (event) => {
-   let buttons = document.querySelectorAll('.keyboard-button');
-   buttons.forEach(element => {
-      if (event.key === element.textContent) {
-         if (event.key !== 'CapsLock') {
-            element.classList.remove('active-button');
-         }
-      }
-      if (event.code === 'Space') {
-         getButtonFromDocument('.space-button').classList.remove('active-button');
-      }
-   });
-});
-
-
 
 
 buttonsContainer.addEventListener("mousedown", (event) => {
@@ -425,8 +434,9 @@ buttonsContainer.addEventListener('click', (event) => {
    if (event.target.classList.contains('keyboard-button')) {
       if (event.target.textContent === 'CapsLock') {
          wrapperTextArea.textContent += '';
-         if (getButtonFromDocument('.caps-button').classList.contains('active-button')) {
+         if (document.querySelector('.buttons-container').classList.contains('caps-active')) {
             deleteAllButtons();
+            document.querySelector('.buttons-container').classList.remove('caps-active');
             currentLanguage === 'ru' ? createButtons(russianButtons) : createButtons(englishButtons);
             getButtonFromDocument('.caps-button').classList.remove('active-button');
          } else {
@@ -436,6 +446,7 @@ buttonsContainer.addEventListener('click', (event) => {
             } else {
                createButtons(getCopyOfArrayWithUpperCase(englishButtons));
             }
+            document.querySelector('.buttons-container').classList.add('caps-active');
             getButtonFromDocument('.caps-button').classList.add('active-button');
          }
       }
@@ -447,14 +458,15 @@ buttonsContainer.addEventListener('click', (event) => {
       if (event.target.textContent === 'Shift') {
          if (currentLanguage === 'ru') {
             if (getButtonFromDocument('.caps-button').classList.contains('active-button')) {
-               if (event.target.classList.contains('active-button')) {
-                  event.target.classList.remove('active-button');
+               if (document.querySelector('.buttons-container').classList.contains('shift-active')) {
+                  document.querySelector('.buttons-container').classList.remove('shift-active');
                   deleteAllButtons();
                   createButtons(getCopyOfArrayWithUpperCase(russianButtons));
                } else {
                   deleteAllButtons();
                   createButtons(russianButtonsWithShift);
                   getButtonFromDocument('.caps-button').classList.add('active-button');
+                  document.querySelector('.buttons-container').classList.add('shift-active');
                   if (event.target.classList.contains('shift-left-button')) {
                      getButtonFromDocument('.shift-left-button').classList.add('active-button');
                   }
@@ -463,13 +475,14 @@ buttonsContainer.addEventListener('click', (event) => {
                   }
                }
             } else {
-               if (event.target.classList.contains('active-button')) {
+               if (document.querySelector('.buttons-container').classList.contains('shift-active')) {
+                  document.querySelector('.buttons-container').classList.remove('shift-active');
                   deleteAllButtons();
-                  event.target.classList.remove('active-button');
                   createButtons(russianButtons);
                } else {
                   deleteAllButtons();
                   createButtons(russianButtonsWithShift);
+                  document.querySelector('.buttons-container').classList.add('shift-active');
                   if (event.target.classList.contains('shift-left-button')) {
                      getButtonFromDocument('.shift-left-button').classList.add('active-button');
                   }
@@ -480,14 +493,15 @@ buttonsContainer.addEventListener('click', (event) => {
             }
          } else if (currentLanguage === 'en') {
             if (getButtonFromDocument('.caps-button').classList.contains('active-button')) {
-               if (event.target.classList.contains('active-button')) {
-                  event.target.classList.remove('active-button');
+               if (document.querySelector('.buttons-container').classList.contains('shift-active')) {
+                  document.querySelector('.buttons-container').classList.remove('shift-active');
                   deleteAllButtons();
                   createButtons(getCopyOfArrayWithUpperCase(englishButtons));
                } else {
                   deleteAllButtons();
                   createButtons(englishButtonsWithShift);
                   getButtonFromDocument('.caps-button').classList.add('active-button');
+                  document.querySelector('.buttons-container').classList.add('shift-active');
                   if (event.target.classList.contains('shift-left-button')) {
                      getButtonFromDocument('.shift-left-button').classList.add('active-button');
                   }
@@ -496,13 +510,14 @@ buttonsContainer.addEventListener('click', (event) => {
                   }
                }
             } else {
-               if (event.target.classList.contains('active-button')) {
+               if (document.querySelector('.buttons-container').classList.contains('shift-active')) {
+                  document.querySelector('.buttons-container').classList.remove('shift-active');
                   deleteAllButtons();
-                  event.target.classList.remove('active-button');
                   createButtons(englishButtons);
                } else {
                   deleteAllButtons();
                   createButtons(englishButtonsWithShift);
+                  document.querySelector('.buttons-container').classList.add('shift-active');
                   if (event.target.classList.contains('shift-left-button')) {
                      getButtonFromDocument('.shift-left-button').classList.add('active-button');
                   }
@@ -588,6 +603,14 @@ buttonsContainer.addEventListener('mousedown', (event) => {
    if (event.target.classList.contains('keyboard-button') || event.target.classList.contains('material-icons')) {
       if (event.target.textContent === 'keyboard_backspace') {
          wrapperTextArea.textContent = wrapperTextArea.textContent.substring(0, wrapperTextArea.textContent.length - 1);
+      }
+   }
+});
+
+buttonsContainer.addEventListener('click', (event) => {
+   if (event.target.classList.contains('keyboard-button')) {
+      if (event.target.textContent.length <= 1) {
+         wrapperTextArea.textContent += event.target.textContent;
       }
    }
 });
