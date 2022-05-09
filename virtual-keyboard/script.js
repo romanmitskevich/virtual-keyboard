@@ -164,11 +164,6 @@ document.addEventListener('keydown', (event) => {
          wrapperTextArea.textContent += element.textContent;
       }
    });
-
-   if (event.code === 'Space') {
-      getButtonFromDocument('.space-button').classList.add('active-button');
-      wrapperTextArea.textContent += ' ';
-   }
 });
 
 document.addEventListener('keyup', (event) => {
@@ -178,9 +173,6 @@ document.addEventListener('keyup', (event) => {
          if (event.key !== 'CapsLock') {
             element.classList.remove('active-button');
          }
-      }
-      if (event.code === 'Space') {
-         getButtonFromDocument('.space-button').classList.remove('active-button');
       }
    });
 });
@@ -332,6 +324,19 @@ document.addEventListener('keyup', (event) => {
    if (event.key === 'AltGraph' || event.code === 'AltRight') {
       event.preventDefault();
       getButtonFromDocument('.alt-button-right').classList.remove('active-button');
+   }
+});
+
+document.addEventListener('keydown', (event) => {
+   if (event.code === 'Space') {
+      getButtonFromDocument('.space-button').classList.add('active-button');
+      wrapperTextArea.textContent += ' ';
+   }
+});
+
+document.addEventListener('keyup', (event) => {
+   if (event.code === 'Space') {
+      getButtonFromDocument('.space-button').classList.remove('active-button');
    }
 });
 
